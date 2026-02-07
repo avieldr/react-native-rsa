@@ -51,6 +51,7 @@ Zero runtime dependencies — only peer dependencies on React and React Native.
 - Requires **New Architecture** (Turbo Modules) — React Native **0.71+**
 - Android **API 24+** (Android 7.0)
 - iOS **13.4+**
+- **Expo** — Supported with [development builds](https://docs.expo.dev/develop/development-builds/introduction/) (`npx expo prebuild`). Not compatible with Expo Go.
 
 ## Installation
 
