@@ -74,7 +74,10 @@ const NATIVE_ERROR_CODE_MAP: Record<string, RsaErrorCode> = {
  * Wrap a native error into an RsaError with a normalized code.
  * If the error is already an RsaError, returns it unchanged.
  */
-export function wrapNativeError(error: unknown, fallbackCode: RsaErrorCode): RsaError {
+export function wrapNativeError(
+  error: unknown,
+  fallbackCode: RsaErrorCode
+): RsaError {
   if (error instanceof RsaError) {
     return error;
   }
@@ -82,7 +85,8 @@ export function wrapNativeError(error: unknown, fallbackCode: RsaErrorCode): Rsa
   if (error instanceof Error) {
     // React Native errors from native modules have a `code` property
     const nativeCode = (error as { code?: string }).code;
-    const code = (nativeCode && NATIVE_ERROR_CODE_MAP[nativeCode]) || fallbackCode;
+    const code =
+      (nativeCode && NATIVE_ERROR_CODE_MAP[nativeCode]) || fallbackCode;
     return new RsaError(code, error.message, error);
   }
 
@@ -103,9 +107,7 @@ export function requireString(
 
 export function requirePrivateKey(pem: string): void {
   requireString(pem, 'privateKey');
-  if (
-    pem.includes('BEGIN PUBLIC KEY')
-  ) {
+  if (pem.includes('BEGIN PUBLIC KEY')) {
     throw new RsaError(
       'INVALID_KEY',
       'Expected a private key (BEGIN RSA PRIVATE KEY or BEGIN PRIVATE KEY), but received a public key'
@@ -145,7 +147,9 @@ export function validateKeySize(keySize: number): void {
   if (!(VALID_KEY_SIZES as readonly number[]).includes(keySize)) {
     throw new RsaError(
       'INVALID_KEY_SIZE',
-      `Invalid key size ${keySize}. Supported sizes: ${VALID_KEY_SIZES.join(', ')}`
+      `Invalid key size ${keySize}. Supported sizes: ${VALID_KEY_SIZES.join(
+        ', '
+      )}`
     );
   }
 }

@@ -24,6 +24,13 @@ export default defineConfig([
     },
   },
   {
+    // Bitwise operators are intentional in encoding and key-parsing utilities
+    files: ['src/encoding.ts', 'src/keyInfo.ts'],
+    rules: {
+      'no-bitwise': 'off',
+    },
+  },
+  {
     ignores: ['node_modules/', 'lib/'],
   },
 ]);

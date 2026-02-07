@@ -1,6 +1,6 @@
 {
   "name": "@avieldr/react-native-rsa",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "High-performance native RSA cryptography for React Native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

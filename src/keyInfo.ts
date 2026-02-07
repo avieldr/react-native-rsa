@@ -58,7 +58,9 @@ function validatePKCS1Structure(derBytes: Uint8Array): string[] {
   while (tempOffset < endOffset && tempOffset < derBytes.length) {
     if (derBytes[tempOffset] !== 0x02) {
       errors.push(
-        `Expected INTEGER tag (0x02) at position ${tempOffset}, got 0x${derBytes[tempOffset]?.toString(16)}`
+        `Expected INTEGER tag (0x02) at position ${tempOffset}, got 0x${derBytes[
+          tempOffset
+        ]?.toString(16)}`
       );
       break;
     }
@@ -76,9 +78,7 @@ function validatePKCS1Structure(derBytes: Uint8Array): string[] {
   }
 
   if (integerCount !== 9) {
-    errors.push(
-      `Expected 9 INTEGER fields for PKCS#1, found ${integerCount}`
-    );
+    errors.push(`Expected 9 INTEGER fields for PKCS#1, found ${integerCount}`);
   }
   return errors;
 }
@@ -107,7 +107,9 @@ function validatePKCS8Structure(derBytes: Uint8Array): string[] {
   // version INTEGER (should be 0)
   if (offset >= endOffset || derBytes[offset] !== 0x02) {
     errors.push(
-      `Expected INTEGER tag (0x02) for version, got 0x${derBytes[offset]?.toString(16)}`
+      `Expected INTEGER tag (0x02) for version, got 0x${derBytes[
+        offset
+      ]?.toString(16)}`
     );
     return errors;
   }
@@ -125,7 +127,9 @@ function validatePKCS8Structure(derBytes: Uint8Array): string[] {
   // AlgorithmIdentifier SEQUENCE
   if (offset >= endOffset || derBytes[offset] !== 0x30) {
     errors.push(
-      `Expected SEQUENCE tag (0x30) for AlgorithmIdentifier, got 0x${derBytes[offset]?.toString(16)}`
+      `Expected SEQUENCE tag (0x30) for AlgorithmIdentifier, got 0x${derBytes[
+        offset
+      ]?.toString(16)}`
     );
     return errors;
   }
@@ -143,7 +147,9 @@ function validatePKCS8Structure(derBytes: Uint8Array): string[] {
   // privateKey OCTET STRING
   if (offset >= endOffset || derBytes[offset] !== 0x04) {
     errors.push(
-      `Expected OCTET STRING tag (0x04) for privateKey, got 0x${derBytes[offset]?.toString(16)}`
+      `Expected OCTET STRING tag (0x04) for privateKey, got 0x${derBytes[
+        offset
+      ]?.toString(16)}`
     );
     return errors;
   }
@@ -175,7 +181,9 @@ function validateSPKIStructure(derBytes: Uint8Array): string[] {
   // AlgorithmIdentifier SEQUENCE
   if (offset >= endOffset || derBytes[offset] !== 0x30) {
     errors.push(
-      `Expected SEQUENCE tag (0x30) for AlgorithmIdentifier, got 0x${derBytes[offset]?.toString(16)}`
+      `Expected SEQUENCE tag (0x30) for AlgorithmIdentifier, got 0x${derBytes[
+        offset
+      ]?.toString(16)}`
     );
     return errors;
   }
@@ -193,7 +201,9 @@ function validateSPKIStructure(derBytes: Uint8Array): string[] {
   // subjectPublicKey BIT STRING
   if (offset >= endOffset || derBytes[offset] !== 0x03) {
     errors.push(
-      `Expected BIT STRING tag (0x03) for subjectPublicKey, got 0x${derBytes[offset]?.toString(16)}`
+      `Expected BIT STRING tag (0x03) for subjectPublicKey, got 0x${derBytes[
+        offset
+      ]?.toString(16)}`
     );
     return errors;
   }
@@ -208,15 +218,19 @@ const BASE64_CHARS =
 function base64Decode(input: string): Uint8Array {
   const cleaned = input.replace(/[^A-Za-z0-9+/=]/g, '');
   const len = cleaned.length;
-  const byteLen = (len * 3) / 4 - (cleaned.endsWith('==') ? 2 : cleaned.endsWith('=') ? 1 : 0);
+  const byteLen =
+    (len * 3) / 4 -
+    (cleaned.endsWith('==') ? 2 : cleaned.endsWith('=') ? 1 : 0);
   const bytes = new Uint8Array(byteLen);
   let p = 0;
 
   for (let i = 0; i < len; i += 4) {
     const a = BASE64_CHARS.indexOf(cleaned[i]!);
     const b = BASE64_CHARS.indexOf(cleaned[i + 1]!);
-    const c = cleaned[i + 2] === '=' ? 0 : BASE64_CHARS.indexOf(cleaned[i + 2]!);
-    const d = cleaned[i + 3] === '=' ? 0 : BASE64_CHARS.indexOf(cleaned[i + 3]!);
+    const c =
+      cleaned[i + 2] === '=' ? 0 : BASE64_CHARS.indexOf(cleaned[i + 2]!);
+    const d =
+      cleaned[i + 3] === '=' ? 0 : BASE64_CHARS.indexOf(cleaned[i + 3]!);
 
     const bits = (a << 18) | (b << 12) | (c << 6) | d;
 

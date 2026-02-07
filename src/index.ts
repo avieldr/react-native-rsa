@@ -81,9 +81,7 @@ async function generateKeyPair(
  * @throws {RsaError} INVALID_KEY if privateKeyPEM is not a valid private key
  * @throws {RsaError} KEY_EXTRACTION_FAILED if native operation fails
  */
-async function getPublicKeyFromPrivate(
-  privateKeyPEM: string
-): Promise<string> {
+async function getPublicKeyFromPrivate(privateKeyPEM: string): Promise<string> {
   requirePrivateKey(privateKeyPEM);
 
   try {
@@ -257,7 +255,13 @@ async function verify(
   const dataBase64 = encoding === 'utf8' ? utf8ToBase64(data) : data;
 
   try {
-    return await NativeRsa.verify(dataBase64, signature, publicKeyPEM, padding, hash);
+    return await NativeRsa.verify(
+      dataBase64,
+      signature,
+      publicKeyPEM,
+      padding,
+      hash
+    );
   } catch (error) {
     throw wrapNativeError(error, 'VERIFICATION_FAILED');
   }
