@@ -160,21 +160,17 @@ signatureBase64:(NSString *)signatureBase64
 {
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSError *error = nil;
-        // Swift `throws -> Bool` maps to Obj-C `(BOOL)...error:(NSError **)`.
-        // - YES + nil error = signature valid
-        // - NO  + nil error = signature invalid (legitimate false)
-        // - NO  + error set = actual error occurred
-        BOOL result = [RSASigner verifyWithDataBase64:dataBase64
-                                     signatureBase64:signatureBase64
-                                        publicKeyPEM:publicKeyPEM
-                                             padding:padding
-                                                hash:hash
-                                               error:&error];
+        NSNumber *result = [RSASigner verifyWithDataBase64:dataBase64
+                                          signatureBase64:signatureBase64
+                                             publicKeyPEM:publicKeyPEM
+                                                  padding:padding
+                                                     hash:hash
+                                                    error:&error];
         if (error != nil) {
             reject(@"RSAVerifyError", error.localizedDescription, error);
             return;
         }
-        resolve(@(result));
+        resolve(result);
     });
 }
 

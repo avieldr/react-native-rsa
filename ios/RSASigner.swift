@@ -60,12 +60,10 @@ import Security
      * - Throws: If the input is invalid or key loading fails
      * - Returns: true if the signature is valid, false otherwise
      *
-     * Note on Swift→Obj-C bridging: A `throws -> Bool` method maps to Obj-C as
-     * `(BOOL)...error:(NSError **)`. When the method returns `false` normally
-     * (invalid signature), `*error` is nil. When it throws (actual error), `*error`
-     * is set. The bridge checks `error != nil` to distinguish these cases.
+     * Returns NSNumber (not Bool) because Swift `@objc throws -> Bool` is not
+     * allowed — throwing methods must return Void or an Objective-C class type.
      */
-    @objc public static func verify(dataBase64: String, signatureBase64: String, publicKeyPEM: String, padding: String, hash: String) throws -> Bool {
+    @objc public static func verify(dataBase64: String, signatureBase64: String, publicKeyPEM: String, padding: String, hash: String) throws -> NSNumber {
         guard let data = Data(base64Encoded: dataBase64) else {
             throw NSError(domain: "RSASigner", code: 3,
                           userInfo: [NSLocalizedDescriptionKey: "Invalid base64 input data"])
@@ -90,12 +88,12 @@ import Security
             // errSecVerifyFailed (-67808) means "signature doesn't match" — not an actual error.
             // Return false for this case; only throw for unexpected failures.
             if nsError.domain == NSOSStatusErrorDomain && nsError.code == Int(errSecVerifyFailed) {
-                return false
+                return NSNumber(value: false)
             }
             throw NSError(domain: "RSASigner", code: 5,
                           userInfo: [NSLocalizedDescriptionKey: "Verification error: \(cfError.localizedDescription)"])
         }
 
-        return result
+        return NSNumber(value: result)
     }
 }
